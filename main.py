@@ -8,11 +8,30 @@ PREVIEW_ROWS = 5
 MAX_CELL_WIDTH = 24
 
 
+def nonnegative_int(value: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as error:
+        raise argparse.ArgumentTypeError("must be a nonnegative integer") from error
+
+    if parsed < 0:
+        raise argparse.ArgumentTypeError("must be a nonnegative integer")
+
+    return parsed
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Inspect a CSV file and print a basic summary."
     )
     parser.add_argument("csv_path", help="Path to the CSV file to inspect.")
+    parser.add_argument(
+        "--head",
+        type=nonnegative_int,
+        default=PREVIEW_ROWS,
+        metavar="N",
+        help=f"Number of example rows to preview. Defaults to {PREVIEW_ROWS}.",
+    )
     return parser.parse_args()
 
 
@@ -49,7 +68,7 @@ def format_table(headers: list[str], rows: list[list[str]]) -> str:
     return "\n".join([header_line, divider, *row_lines])
 
 
-def inspect_csv(csv_path: Path) -> tuple[list[str], list[list[str]], int]:
+def inspect_csv(csv_path: Path, preview_limit: int) -> tuple[list[str], list[list[str]], int]:
     with csv_path.open(newline="", encoding="utf-8-sig") as csv_file:
         reader = csv.reader(csv_file)
         try:
@@ -61,7 +80,7 @@ def inspect_csv(csv_path: Path) -> tuple[list[str], list[list[str]], int]:
         preview = []
         for row in reader:
             row_count += 1
-            if len(preview) < PREVIEW_ROWS:
+            if len(preview) < preview_limit:
                 preview.append(row)
 
     return headers, preview, row_count
@@ -72,7 +91,7 @@ def main() -> int:
     csv_path = Path(args.csv_path)
 
     try:
-        headers, preview, row_count = inspect_csv(csv_path)
+        headers, preview, row_count = inspect_csv(csv_path, args.head)
     except FileNotFoundError:
         print(f"Error: CSV file not found: {csv_path}", file=sys.stderr)
         return 1
@@ -89,7 +108,7 @@ def main() -> int:
         print(f"- {header}")
 
     print()
-    print(f"Preview (first {min(PREVIEW_ROWS, row_count)} rows):")
+    print(f"Preview (first {len(preview)} rows):")
     print(format_table(headers, preview))
     return 0
 

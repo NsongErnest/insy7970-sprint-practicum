@@ -1,37 +1,36 @@
-# Sprint 1: Basic CSV inspection
+# Sprint 2: Configurable CSV preview
 
 ## Problem Statement
 
-Build a Python command-line tool to inspect CSV files.
+Extend the CSV inspection command-line tool so users can control how many example rows appear in the preview output.
 
 ## User Requirements
 
 Goals for this sprint as 3-5 concise, concrete user needs:
 
-1. The user can provide a CSV file path when running the tool from the command line.
-2. The user can see the total number of data rows and columns in the CSV file.
-3. The user can see the column names exactly as they appear in the CSV header.
-4. The user can preview the first few rows to confirm the file loaded correctly.
-5. The project includes basic run instructions so the user knows how to execute the tool.
+1. The user can pass a `--head N` option to choose how many example rows to preview.
+2. The user can omit `--head` and still get the existing default preview behavior.
+3. The user receives a clear error if `--head` is not a valid nonnegative integer.
+4. The preview label clearly states how many rows are being shown.
+5. The project run instructions include an example using `--head`.
 
 ## Plan
 
-Implement a small Python command-line program that accepts a CSV file path, reads the file with Python's standard CSV library, and prints a basic summary. Keep the first sprint focused on loading and inspecting the file without cleaning, transforming, or validating every data-quality issue.
+Add an optional `--head` command-line argument with a sensible default matching Sprint 1. Use the parsed value to control how many rows are stored and printed in the preview, validate invalid values through argument handling, and update the documentation with an example command.
 
 ## Tasks
 
-1. Add command-line argument handling for a required CSV file path.
-2. Read the CSV file using the standard library so quoted commas are handled correctly.
-3. Count data rows and columns from the parsed CSV content.
-4. Print the column names and a small preview of the first rows.
-5. Add basic run instructions to the project documentation.
-6. Handle missing or unreadable files with a clear message and nonzero exit code.
-7. Verify the tool against the provided `data/test.csv` file.
+1. Add a `--head N` argument to the command-line parser.
+2. Use the requested preview size when collecting example rows from the CSV.
+3. Preserve the Sprint 1 default of showing five rows when `--head` is omitted.
+4. Reject invalid `--head` values with a clear command-line error.
+5. Update `README.md` with a `--head` usage example.
+6. Verify default preview output, custom preview output, zero-row preview output, and invalid `--head` handling.
 
 ## Out of Scope
 
-This sprint will not clean missing values, normalize capitalization, trim all fields, parse unusual dates, detect duplicate identifiers, or validate numeric values. It will also not add external dependencies or build an interactive interface.
+This sprint will not add missing-value analysis, numeric statistics, Markdown export, data cleaning, date parsing, duplicate detection, or interactive prompts.
 
 ## Definition of Done
 
-The sprint is done when the command-line tool can be run against `data/test.csv`, prints row and column counts, lists the headers, shows a short row preview, and reports understandable errors for missing files. The implementation should be committed only after the behavior has been manually verified.
+The sprint is done when `uv run python main.py data/test.csv --head 3` shows exactly three preview rows, the command without `--head` still shows the default preview, `--head 0` shows no data rows, invalid `--head` values produce a clear error, and the README includes the new option.
