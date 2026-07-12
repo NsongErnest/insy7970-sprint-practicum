@@ -294,9 +294,14 @@ Codex added details I might not have written on my own, such as clear error hand
 preview-label requirements, and validation for invalid --head values. 
 uv helped by running the project consistently with uv run python main.py data/test.csv, 
 without needing a separate manual Python setup.
-Before committing, I inspected the program output, checked that row and column counts 
-matched the CSV, verified error cases, reviewed git status, 
-and made sure only the intended files were staged.
+
+Before committing, I inspected the program output, checked that the row and column counts
+matched the CSV, verified error cases, reviewed git status, and made sure only the 
+intended files were staged. I also reviewed git diff before committing each sprint
+to inspect the exact file changes and confirm that only the intended updates were
+included. This helped me avoid committing accidental changes and made the commit history
+easier to understand.
+
 In a third sprint, I would add a related data-quality feature 
 such as missing-value percentages so the tool starts reporting useful cleaning clues
 without changing the data.
@@ -328,3 +333,4 @@ where I can use clear prompts with Codex and manage the project workflow with uv
 
 
 ## Unresolved question
+None
