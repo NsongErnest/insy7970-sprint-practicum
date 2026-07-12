@@ -3,7 +3,7 @@
 Operating system: Windows
 Terminal used:Git Bash
 Codex tool used: ChatGPT
-GitHub repository URL:
+GitHub repository URL: https://github.com/NsongErnest/insy7970-sprint-practicum
 
 ## Setup notes
 Project folder path: ernes@Nsong MINGW64 ~/insy7970/insy7970-sprint-practicum (main)
